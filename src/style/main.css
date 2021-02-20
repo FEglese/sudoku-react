@@ -1,0 +1,61 @@
+.cell {
+    width: 60px;
+    height: 60px;
+    outline: 1px solid black;
+    display: inline-block;
+    position: relative;
+    margin-right: 1px;
+    margin-bottom: 1px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.fixed-cell {
+    background-color: rgb(224, 224, 224);
+}
+
+.selected-cell {
+    background-color: rgb(156, 201, 247);
+}
+
+.highligted-cell {
+    background-color: rgb(217, 234, 252);
+}
+
+.highlighted-fixed-cell {
+    background-color: rgb(184, 204, 223);
+}
+
+.cell-content {
+    font-size: 20pt;
+    padding-top: 9px;
+    user-select: none;
+}
+
+.bottom-border{
+    border-bottom: 2px solid black;
+}
+
+.right-border{
+    border-right: 2px solid black;
+}
+
+.game {
+    margin: 0 auto;
+    margin-top: 30px;
+    width: 600px;
+}
+
+.board {
+    outline: 3px solid black;
+    height: 549px;
+    width: 549px;
+    margin: auto;
+    position: relative;
+    overflow:hidden;
+}
+
+.status {
+    text-align: center;
+    height: 40px;
+}
