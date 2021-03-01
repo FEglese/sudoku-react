@@ -1,24 +1,42 @@
+// Libraries
 import React from 'react';
-import Cell from './cell.jsx';
-import Cordinate from './cordinate';
-import CellObject from './cellObject';
 
-import {getNewProlem} from './problemGenerator';
+// Components
+import CellVM from './cell';
 
-class Sudoku extends React.Component {
-  constructor(props) {
+// Objects
+import Cell from '../Representation/cell';
+import Cordinate from '../Representation/cordinate';
+
+// Enums
+import gameDifficulty from '../enums/gameDifficulty';
+
+// Services
+import {newProblem} from '../services/problemGeneratorService';
+
+interface Props {
+
+}
+
+interface State {
+  selectedCell: Cordinate;
+  squareValues: Cell[][];
+}
+
+class Sudoku extends React.Component<Props, State> {
+  constructor(props : Props) {
     super(props);    
     this.state = {
       squareValues: [
-        Array(9).fill(new CellObject(false, 0)),
-        Array(9).fill(new CellObject(false, 0)),
-        Array(9).fill(new CellObject(false, 0)),
-        Array(9).fill(new CellObject(false, 0)),
-        Array(9).fill(new CellObject(false, 0)),
-        Array(9).fill(new CellObject(false, 0)),
-        Array(9).fill(new CellObject(false, 0)),
-        Array(9).fill(new CellObject(false, 0)),
-        Array(9).fill(new CellObject(false, 0)),
+        Array(9).fill(new Cell(false, 0)),
+        Array(9).fill(new Cell(false, 0)),
+        Array(9).fill(new Cell(false, 0)),
+        Array(9).fill(new Cell(false, 0)),
+        Array(9).fill(new Cell(false, 0)),
+        Array(9).fill(new Cell(false, 0)),
+        Array(9).fill(new Cell(false, 0)),
+        Array(9).fill(new Cell(false, 0)),
+        Array(9).fill(new Cell(false, 0)),
       ],
       selectedCell: new Cordinate(null, null),
     }
@@ -33,40 +51,39 @@ class Sudoku extends React.Component {
     document.addEventListener('keydown', this.handleNumPress);
   }
 
-  isCellInSelectedBox(cell){
-
-  }
-
-  renderCell(cellObj, cellCordinate) {
+  renderCell(cellObj: Cell, cellCordinate: Cordinate) {
     var isSelected = JSON.stringify(this.state.selectedCell) === JSON.stringify(cellCordinate);
     var isHighligted = false;
     if(!isSelected){
       isHighligted = this.state.selectedCell.row === cellCordinate.row
         || this.state.selectedCell.col === cellCordinate.col;
     }
-    
+
     return (
-      <Cell
+      <CellVM
         value={cellObj.value}
         onClick={() => this.handleCellonClick(cellCordinate)}
+
         isFixed={cellObj.isFixed}
         isSelected={isSelected}
         isHighligted={isHighligted}
-        row={cellCordinate.row}
-        col={cellCordinate.col}
+
+        isBottomBorder={(cellCordinate?.row ?? 0) % 3 === 2 && cellCordinate.row !== 8}
+        isRightBorder={(cellCordinate?.col ?? 0) % 3 === 2 && cellCordinate.col !== 8}
+
         key={cellCordinate.row + ',' + cellCordinate.col }
       />
     )
   }
 
-  handleCellonClick(cellCordinate) {
+  handleCellonClick(cellCordinate : Cordinate) {
     this.setState({selectedCell: cellCordinate});
   }
 
-  handleNumPress(e) {
-    if(e.keyCode < 48 |
-      e.keyCode > 57 |
-      this.state.selectedCell.row === null|
+  handleNumPress(e : KeyboardEvent) :void {
+    if(e.keyCode < 48 ||
+      e.keyCode > 57 ||
+      this.state.selectedCell.row === null||
       this.state.selectedCell.col === null){
       return;
     }
@@ -75,37 +92,36 @@ class Sudoku extends React.Component {
       this.state.selectedCell.row,
       this.state.selectedCell.col,
       e.keyCode - 48)
-
   }
 
-  newEasyBoard() {    
+  newEasyBoard() :void {    
     this.setState({
-      squareValues: getNewProlem('easy'),
+      squareValues: newProblem(gameDifficulty.EASY),
       selectedCell: new Cordinate(null, null),
     })
   }
 
-  newMediumBoard() {
+  newMediumBoard() :void {
     this.setState({
-      squareValues: getNewProlem('medium'),
+      squareValues: newProblem(gameDifficulty.MEDIUM),
       selectedCell: new Cordinate(null, null),
     })
   }
 
-  setCellValue(row, col, value) {
+  setCellValue(row:number, col:number, value:number) :void {
     let tempSquares = this.state.squareValues.slice();
-    tempSquares[row][col] = new CellObject(false, value)
+    tempSquares[row][col] = new Cell(false, value)
     this.setState({
       squareValues: tempSquares,
     })
   }
 
-  isArrayValid(line){
+  isArrayValid(line: Cell[]) :boolean {
     const correctSequence = "[1,2,3,4,5,6,7,8,9]";
-    return (JSON.stringify(line.map(x => x[1]).sort()) === correctSequence)
+    return (JSON.stringify(line.map(x => x.value).sort()) === correctSequence)
   }
 
-  getCol(colNum){
+  getCol(colNum: number) :Cell[] {
     var collumn = [];
     for(var i = 0; i<this.state.squareValues.length; i++){
       collumn.push(this.state.squareValues[i][colNum]);
@@ -113,7 +129,7 @@ class Sudoku extends React.Component {
     return collumn;
   }
 
-  getSquareValues(squareNum){
+  getSquareValues(squareNum: number){
     var valuesArray = [];
     var baseRow = Math.floor(squareNum / 3) * 3;
     var baseCol = (squareNum % 3) * 3;
@@ -125,7 +141,7 @@ class Sudoku extends React.Component {
     return valuesArray.flat(1);
   }
 
-  completeStatus(){
+  completeStatus() :string{
     var flattenedCells = this.state.squareValues.slice().flat(1);
 
     if(flattenedCells.filter(cell => cell.value === 0).length){

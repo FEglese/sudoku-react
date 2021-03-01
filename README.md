@@ -20,4 +20,4 @@ The aim of this is to practice what I have learnt so far on passing state and ev
 - [ ] More exciting completed the game animation
 - [ ] Timer
 - [ ] Confirmation for new game (If a square has been filled already)
-
+- [x] Refactor into Typescript (Completed 1/3/21)

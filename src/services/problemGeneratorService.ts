@@ -1,15 +1,16 @@
-import CellObject from './cellObject'
+import Cell from '../Representation/cell'
+import gameDifficulty from '../enums/gameDifficulty'
 
 const blankProblem = [
-  Array(9).fill(new CellObject(false,0)),
-  Array(9).fill(new CellObject(false,0)),
-  Array(9).fill(new CellObject(false,0)),
-  Array(9).fill(new CellObject(false,0)),
-  Array(9).fill(new CellObject(false,0)),
-  Array(9).fill(new CellObject(false,0)),
-  Array(9).fill(new CellObject(false,0)),
-  Array(9).fill(new CellObject(false,0)),
-  Array(9).fill(new CellObject(false,0)),
+  Array(9).fill(new Cell(false,0)),
+  Array(9).fill(new Cell(false,0)),
+  Array(9).fill(new Cell(false,0)),
+  Array(9).fill(new Cell(false,0)),
+  Array(9).fill(new Cell(false,0)),
+  Array(9).fill(new Cell(false,0)),
+  Array(9).fill(new Cell(false,0)),
+  Array(9).fill(new Cell(false,0)),
+  Array(9).fill(new Cell(false,0)),
 ]
 
 // TODO: Put these problems into csv files
@@ -30,25 +31,25 @@ const mediumProblems = [
   '070030200005002900400900000004205090010390706200000005192700030047500100000103000',
 ]
 
-function getNewProlem(difficulty) {
-  if (difficulty === 'medium'){
+function newProblem(difficulty: gameDifficulty) : Cell[][] {
+  if (difficulty === gameDifficulty.MEDIUM){
     return generateBoard(mediumProblems[Math.floor(Math.random() * mediumProblems.length)]);
-  } else if ( difficulty === 'easy'){
+  } else if ( difficulty === gameDifficulty.EASY){
     return generateBoard(easyProblems[Math.floor(Math.random() * easyProblems.length)]);
   } else{
     return blankProblem.slice();
   }
 }
 
-function generateBoard(problemString) {
+function generateBoard(problemString: string) : Cell[][] {
   let newBoard = blankProblem.slice();
 
   for (let i = 0; i < 81; i++) {
     var boardVal = parseInt(problemString[i])
-    newBoard[Math.floor(i / 9)][i % 9] = new CellObject(boardVal !== 0, boardVal);
+    newBoard[Math.floor(i / 9)][i % 9] = new Cell(boardVal !== 0, boardVal);
   }
 
   return newBoard;
 }
 
-export {getNewProlem};
+export {newProblem};

@@ -1,12 +1,27 @@
 import React from 'react';
 import ClassNames from 'classnames';
 
-class Cell extends React.Component {
-  constructor(props) {
+interface Props {
+  onClick: any;
+  value: number;
+
+  isSelected: boolean;
+  isFixed: boolean;
+  isHighligted: boolean;
+
+  isBottomBorder: boolean;
+  isRightBorder: boolean;
+}
+
+interface State {
+  onClick: any;
+}
+
+class CellVM extends React.Component<Props, State> {
+  constructor(props : Props) {
     super(props);
     this.state = {
       onClick: this.props.onClick,
-      suggestedValues: null,
     }
   }
 
@@ -16,9 +31,9 @@ class Cell extends React.Component {
       'selected-cell': this.props.isSelected,
       'fixed-cell': this.props.isFixed,
       'highligted-cell': this.props.isHighligted,
-      'highlighted-fixed-cell': this.props.isHighligted & this.props.isFixed,
-      'bottom-border': this.props.row % 3 === 2 & this.props.row !== 8,
-      'right-border': this.props.col % 3 === 2 & this.props.col !== 8,
+      'highlighted-fixed-cell': this.props.isHighligted && this.props.isFixed,
+      'bottom-border': this.props.isBottomBorder,
+      'right-border': this.props.isRightBorder,
     })
 
     var onClick = this.props.isFixed ? null : this.state.onClick;
@@ -34,4 +49,4 @@ class Cell extends React.Component {
   }
 }
 
-export default Cell;
+export default CellVM;
