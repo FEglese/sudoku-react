@@ -1,7 +1,7 @@
 enum gameDifficulty {
-  EASY,
-  MEDIUM,
-  HARD
+	EASY,
+	MEDIUM,
+	HARD,
 }
 
 export default gameDifficulty;
