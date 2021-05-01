@@ -4,9 +4,9 @@ import React from "react";
 // Components
 import CellVM from "./cell";
 
-// Objects
-import Cell from "../Representation/cell";
-import Cordinate from "../Representation/cordinate";
+// Interfaces
+import Cell from "../interfaces/cell";
+import Cordinate from "../interfaces/cordinate";
 
 // Enums
 import gameDifficulty from "../enums/gameDifficulty";
@@ -26,29 +26,28 @@ class Sudoku extends React.Component<Props, State> {
 		super(props);
 		this.state = {
 			squareValues: [
-				Array(9).fill(new Cell(false, 0)),
-				Array(9).fill(new Cell(false, 0)),
-				Array(9).fill(new Cell(false, 0)),
-				Array(9).fill(new Cell(false, 0)),
-				Array(9).fill(new Cell(false, 0)),
-				Array(9).fill(new Cell(false, 0)),
-				Array(9).fill(new Cell(false, 0)),
-				Array(9).fill(new Cell(false, 0)),
-				Array(9).fill(new Cell(false, 0)),
+				Array(9).fill({ isFixed: false, value: 0 }),
+				Array(9).fill({ isFixed: false, value: 0 }),
+				Array(9).fill({ isFixed: false, value: 0 }),
+				Array(9).fill({ isFixed: false, value: 0 }),
+				Array(9).fill({ isFixed: false, value: 0 }),
+				Array(9).fill({ isFixed: false, value: 0 }),
+				Array(9).fill({ isFixed: false, value: 0 }),
+				Array(9).fill({ isFixed: false, value: 0 }),
+				Array(9).fill({ isFixed: false, value: 0 }),
 			],
-			selectedCell: new Cordinate(null, null),
+			selectedCell: { row: null, col: null },
 		};
 
 		this.handleNumPress = this.handleNumPress.bind(this);
-		this.newEasyBoard = this.newEasyBoard.bind(this);
-		this.newMediumBoard = this.newMediumBoard.bind(this);
+		this.loadNewBoard = this.loadNewBoard.bind(this);
 	}
 
 	componentDidMount() {
 		document.addEventListener("keydown", this.handleNumPress);
 	}
 
-	renderCell(cellObj: Cell, cellCordinate: Cordinate) {
+	renderCell(thisCell: Cell, cellCordinate: Cordinate) {
 		var isSelected =
 			JSON.stringify(this.state.selectedCell) === JSON.stringify(cellCordinate);
 		var isHighligted = false;
@@ -60,9 +59,9 @@ class Sudoku extends React.Component<Props, State> {
 
 		return (
 			<CellVM
-				value={cellObj.value}
+				value={thisCell.value}
 				onClickHandler={() => this.handleCellonClick(cellCordinate)}
-				isFixed={cellObj.isFixed}
+				isFixed={thisCell.isFixed}
 				isSelected={isSelected}
 				isHighligted={isHighligted}
 				isBottomBorder={
@@ -81,8 +80,6 @@ class Sudoku extends React.Component<Props, State> {
 	}
 
 	handleNumPress(e: KeyboardEvent): void {
-		console.log({ e });
-
 		if (
 			!e.code.includes("Digit") ||
 			this.state.selectedCell.row === null ||
@@ -98,23 +95,16 @@ class Sudoku extends React.Component<Props, State> {
 		);
 	}
 
-	newEasyBoard(): void {
+	loadNewBoard(difficulty: gameDifficulty): void {
 		this.setState({
-			squareValues: newProblem(gameDifficulty.EASY),
-			selectedCell: new Cordinate(null, null),
-		});
-	}
-
-	newMediumBoard(): void {
-		this.setState({
-			squareValues: newProblem(gameDifficulty.MEDIUM),
-			selectedCell: new Cordinate(null, null),
+			squareValues: newProblem(difficulty),
+			selectedCell: { row: null, col: null },
 		});
 	}
 
 	setCellValue(row: number, col: number, value: number): void {
 		let tempSquares = this.state.squareValues.slice();
-		tempSquares[row][col] = new Cell(false, value);
+		tempSquares[row][col] = { isFixed: false, value };
 		this.setState({
 			squareValues: tempSquares,
 		});
@@ -184,7 +174,7 @@ class Sudoku extends React.Component<Props, State> {
 					{this.state.squareValues.map((rowVals, rowNum) => (
 						<div className={"band"}>
 							{rowVals.map((cell, colNum) =>
-								this.renderCell(cell, new Cordinate(rowNum, colNum))
+								this.renderCell(cell, { row: rowNum, col: colNum })
 							)}
 						</div>
 					))}
@@ -194,13 +184,13 @@ class Sudoku extends React.Component<Props, State> {
 					<button
 						type="button"
 						className="btn btn-outline-primary btn-lg btn-block"
-						onClick={this.newEasyBoard}>
+						onClick={() => this.loadNewBoard(gameDifficulty.EASY)}>
 						New Easy Board
 					</button>
 					<button
 						type="button"
 						className="btn btn-outline-primary btn-lg btn-block"
-						onClick={this.newMediumBoard}>
+						onClick={() => this.loadNewBoard(gameDifficulty.MEDIUM)}>
 						New Medium Board
 					</button>
 				</div>

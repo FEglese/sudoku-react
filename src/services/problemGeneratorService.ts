@@ -1,16 +1,16 @@
-import Cell from "../Representation/cell";
+import Cell from "../interfaces/cell";
 import gameDifficulty from "../enums/gameDifficulty";
 
 const blankProblem = [
-	Array(9).fill(new Cell(false, 0)),
-	Array(9).fill(new Cell(false, 0)),
-	Array(9).fill(new Cell(false, 0)),
-	Array(9).fill(new Cell(false, 0)),
-	Array(9).fill(new Cell(false, 0)),
-	Array(9).fill(new Cell(false, 0)),
-	Array(9).fill(new Cell(false, 0)),
-	Array(9).fill(new Cell(false, 0)),
-	Array(9).fill(new Cell(false, 0)),
+	Array(9).fill({ isFixed: false, value: 0 }),
+	Array(9).fill({ isFixed: false, value: 0 }),
+	Array(9).fill({ isFixed: false, value: 0 }),
+	Array(9).fill({ isFixed: false, value: 0 }),
+	Array(9).fill({ isFixed: false, value: 0 }),
+	Array(9).fill({ isFixed: false, value: 0 }),
+	Array(9).fill({ isFixed: false, value: 0 }),
+	Array(9).fill({ isFixed: false, value: 0 }),
+	Array(9).fill({ isFixed: false, value: 0 }),
 ];
 
 // TODO: Put these problems into csv files
@@ -50,7 +50,10 @@ function generateBoard(problemString: string): Cell[][] {
 
 	for (let i = 0; i < 81; i++) {
 		var boardVal = parseInt(problemString[i]);
-		newBoard[Math.floor(i / 9)][i % 9] = new Cell(boardVal !== 0, boardVal);
+		newBoard[Math.floor(i / 9)][i % 9] = {
+			isFixed: boardVal !== 0,
+			value: boardVal,
+		};
 	}
 
 	return newBoard;
