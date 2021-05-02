@@ -3,6 +3,7 @@ import React from "react";
 
 // Components
 import CellVM from "./cell";
+import NumButton from "./numButton";
 
 // Interfaces
 import Cell from "../interfaces/cell";
@@ -82,8 +83,8 @@ class Sudoku extends React.Component<Props, State> {
 	handleNumPress(e: KeyboardEvent): void {
 		if (
 			!e.code.includes("Digit") ||
-			this.state.selectedCell.row === null ||
-			this.state.selectedCell.col === null
+			!this.state.selectedCell.row ||
+			!this.state.selectedCell.col
 		) {
 			return;
 		}
@@ -92,6 +93,25 @@ class Sudoku extends React.Component<Props, State> {
 			this.state.selectedCell.row,
 			this.state.selectedCell.col,
 			Number(e.key)
+		);
+	}
+
+	handleNumButtonPress(value: number): void {
+		console.log("handling number button press");
+		console.log({ value });
+		if (
+			value > 9 ||
+			value < 0 ||
+			!this.state.selectedCell.col ||
+			!this.state.selectedCell.row
+		) {
+			return;
+		}
+
+		this.setCellValue(
+			this.state.selectedCell.row,
+			this.state.selectedCell.col,
+			value
 		);
 	}
 
@@ -165,6 +185,17 @@ class Sudoku extends React.Component<Props, State> {
 
 	render() {
 		var status = this.completeStatus();
+		const numButtons = [];
+
+		for (let i = 0; i <= 9; i++) {
+			numButtons.push(
+				<NumButton
+					key={"numKey_" + i}
+					value={i}
+					onClick={() => this.handleNumButtonPress(i)}
+				/>
+			);
+		}
 
 		return (
 			<div className="game">
@@ -178,6 +209,10 @@ class Sudoku extends React.Component<Props, State> {
 							)}
 						</div>
 					))}
+				</div>
+
+				<div className="num-button-group btn-group" role="group">
+					{numButtons}
 				</div>
 
 				<div className="pt-3">

@@ -4,9 +4,10 @@ I quite enjoy sudoku puzzles and I like the idea of being able to make my own en
 
 My plan for this is to look at no tutorials/source code for Sudoku engines and see if I can build up the features to make this into a working application.
 
-The aim of this is to practice what I have learnt so far on passing state and event handling. Eventually I'd like to give a go and building my own (probably quite brute force) sudoku solver. 
+The aim of this is to practice what I have learnt so far on passing state and event handling. Eventually I'd like to give a go and building my own (probably quite brute force) sudoku solver.
 
 ## Timeline:
+
 - [x] Have a simple sudoku board in HTML/CSS in a board component (Completed 10/1/20)
 - [x] Each value of the sudoku cells reflects the state of the board (Completed 10/1/20)
 - [x] Number entry for each cell (Completed 13/1/20)
@@ -21,3 +22,5 @@ The aim of this is to practice what I have learnt so far on passing state and ev
 - [ ] Timer
 - [ ] Confirmation for new game (If a square has been filled already)
 - [x] Refactor into Typescript (Completed 1/3/21)
+- [x] Buttons for clicking numbers (Completed 2/5/21)
+- [ ] Able to click off to unselect a cell on the board

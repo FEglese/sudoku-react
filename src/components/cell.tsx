@@ -4,6 +4,7 @@ import ClassNames from "classnames";
 interface Props {
 	onClickHandler: Function;
 	value: number;
+	key: string;
 
 	isSelected: boolean;
 	isFixed: boolean;
@@ -15,6 +16,7 @@ interface Props {
 
 interface State {
 	onClick: any;
+	key: string;
 }
 
 class CellVM extends React.Component<Props, State> {
@@ -22,6 +24,7 @@ class CellVM extends React.Component<Props, State> {
 		super(props);
 		this.state = {
 			onClick: props.onClickHandler,
+			key: props.key,
 		};
 	}
 
@@ -40,7 +43,7 @@ class CellVM extends React.Component<Props, State> {
 		var value = this.props.value ? this.props.value : null;
 
 		return (
-			<div className={classNames} onClick={onClick}>
+			<div key={this.state.key} className={classNames} onClick={onClick}>
 				<p className="cell-content">{value}</p>
 			</div>
 		);
