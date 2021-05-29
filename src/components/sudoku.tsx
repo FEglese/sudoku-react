@@ -14,6 +14,7 @@ import gameDifficulty from "../enums/gameDifficulty";
 
 // Services
 import { newProblem } from "../services/problemGeneratorService";
+import * as validationService from "../services/boardValidationService";
 
 interface Props {}
 
@@ -130,61 +131,8 @@ class Sudoku extends React.Component<Props, State> {
 		});
 	}
 
-	isArrayValid(line: Cell[]): boolean {
-		const correctSequence = "[1,2,3,4,5,6,7,8,9]";
-		return JSON.stringify(line.map((x) => x.value).sort()) === correctSequence;
-	}
-
-	getCol(colNum: number): Cell[] {
-		var collumn = [];
-		for (var i = 0; i < this.state.squareValues.length; i++) {
-			collumn.push(this.state.squareValues[i][colNum]);
-		}
-		return collumn;
-	}
-
-	getSquareValues(squareNum: number): Cell[] {
-		let valuesArray: Cell[][] = [];
-		let baseRow = Math.floor(squareNum / 3) * 3;
-		let baseCol = (squareNum % 3) * 3;
-
-		valuesArray.push(
-			this.state.squareValues[baseRow].slice(baseCol, baseCol + 3)
-		);
-		valuesArray.push(
-			this.state.squareValues[baseRow + 1].slice(baseCol, baseCol + 3)
-		);
-		valuesArray.push(
-			this.state.squareValues[baseRow + 2].slice(baseCol, baseCol + 3)
-		);
-		return valuesArray.flat(1);
-	}
-
-	completeStatus(): string {
-		const flattenedCells = this.state.squareValues.slice().flat(1);
-
-		if (flattenedCells.filter((cell) => cell.value === 0).length) {
-			return "Sudoku!";
-		}
-
-		for (var i = 0; i < 9; i++) {
-			var thisRow = this.state.squareValues[i];
-			var thisCol = this.getCol(i);
-			var thisSquare = this.getSquareValues(i);
-
-			if (
-				!this.isArrayValid(thisRow) ||
-				!this.isArrayValid(thisCol) ||
-				!this.isArrayValid(thisSquare)
-			) {
-				return "Something not quite right...";
-			}
-		}
-		return "Winner! Well done!";
-	}
-
 	render() {
-		var status = this.completeStatus();
+		var status = validationService.completeStatus(this.state.squareValues);
 		const numButtons = [];
 
 		for (let i = 0; i <= 9; i++) {
