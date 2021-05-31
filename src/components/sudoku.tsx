@@ -41,12 +41,12 @@ class Sudoku extends React.Component<Props, State> {
 			selectedCell: { row: null, col: null },
 		};
 
-		this.handleNumPress = this.handleNumPress.bind(this);
+		this.handleKeyPress = this.handleKeyPress.bind(this);
 		this.loadNewBoard = this.loadNewBoard.bind(this);
 	}
 
 	componentDidMount() {
-		document.addEventListener("keydown", this.handleNumPress);
+		document.addEventListener("keydown", this.handleKeyPress);
 	}
 
 	renderCell(thisCell: Cell, cellCordinate: Cordinate) {
@@ -61,6 +61,7 @@ class Sudoku extends React.Component<Props, State> {
 
 		return (
 			<CellVM
+				key={cellCordinate.row + "," + cellCordinate.col}
 				value={thisCell.value}
 				onClickHandler={() => this.handleCellonClick(cellCordinate)}
 				isFixed={thisCell.isFixed}
@@ -72,7 +73,6 @@ class Sudoku extends React.Component<Props, State> {
 				isRightBorder={
 					(cellCordinate?.col ?? 0) % 3 === 2 && cellCordinate.col !== 8
 				}
-				key={cellCordinate.row + "," + cellCordinate.col}
 			/>
 		);
 	}
@@ -81,34 +81,30 @@ class Sudoku extends React.Component<Props, State> {
 		this.setState({ selectedCell: cellCordinate });
 	}
 
-	handleNumPress(e: KeyboardEvent): void {
-		if (
-			!e.code.includes("Digit") ||
-			!this.state.selectedCell.row ||
-			!this.state.selectedCell.col
-		) {
-			return;
+	handleKeyPress(e: KeyboardEvent): void {
+		switch (true) {
+			case e.code === "Escape":
+				this.setState({ selectedCell: { row: null, col: null } });
+				break;
+			case e.code === "Backspace" || e.code === "Delete":
+				this.setCellValue(
+					this.state.selectedCell.row,
+					this.state.selectedCell.col,
+					0
+				);
+				break;
+			case !e.code.includes("Digit"):
+				break;
+			default:
+				this.setCellValue(
+					this.state.selectedCell.row,
+					this.state.selectedCell.col,
+					Number(e.key)
+				);
 		}
-
-		this.setCellValue(
-			this.state.selectedCell.row,
-			this.state.selectedCell.col,
-			Number(e.key)
-		);
 	}
 
 	handleNumButtonPress(value: number): void {
-		console.log("handling number button press");
-		console.log({ value });
-		if (
-			value > 9 ||
-			value < 0 ||
-			!this.state.selectedCell.col ||
-			!this.state.selectedCell.row
-		) {
-			return;
-		}
-
 		this.setCellValue(
 			this.state.selectedCell.row,
 			this.state.selectedCell.col,
@@ -123,7 +119,11 @@ class Sudoku extends React.Component<Props, State> {
 		});
 	}
 
-	setCellValue(row: number, col: number, value: number): void {
+	setCellValue(row: number | null, col: number | null, value: number): void {
+		if (value > 9 || value < 0 || row === null || col === null) {
+			return;
+		}
+
 		let tempSquares = this.state.squareValues.slice();
 		tempSquares[row][col] = { isFixed: false, value };
 		this.setState({
