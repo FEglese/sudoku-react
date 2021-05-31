@@ -6,7 +6,7 @@ import React from "react";
 import Sudoku from "./components/sudoku";
 
 // Style
-import "./style/main.css";
+import "./style/main.scss";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 ReactDOM.render(<Sudoku />, document.getElementById("root"));
