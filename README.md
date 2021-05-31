@@ -23,4 +23,4 @@ The aim of this is to practice what I have learnt so far on passing state and ev
 - [ ] Confirmation for new game (If a square has been filled already)
 - [x] Refactor into Typescript (Completed 1/3/21)
 - [x] Buttons for clicking numbers (Completed 2/5/21)
-- [ ] Able to click off to unselect a cell on the board
+- [x] Able to click off to unselect a cell on the board (Completed 31/5/21)
