@@ -1,5 +1,6 @@
 // Packages
 import ReactDOM from "react-dom";
+import React from "react";
 
 // Modules
 import Sudoku from "./components/sudoku";
