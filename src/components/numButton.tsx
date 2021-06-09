@@ -7,7 +7,6 @@ interface Props {
 
 const NumButton = (props: Props) => {
 	const numVal = props.value ? props.value : "X";
-
 	return (
 		<button
 			type="button"

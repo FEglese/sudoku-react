@@ -14,40 +14,25 @@ interface Props {
 	isRightBorder: boolean;
 }
 
-interface State {
-	onClick: any;
-	key: string;
-}
+const CellVM = (props: Props) => {
+	const classNames = ClassNames({
+		cell: true,
+		"selected-cell": props.isSelected,
+		"fixed-cell": props.isFixed,
+		"highligted-cell": props.isHighligted,
+		"highlighted-fixed-cell": props.isHighligted && props.isFixed,
+		"bottom-border": props.isBottomBorder,
+		"right-border": props.isRightBorder,
+	});
 
-class CellVM extends React.Component<Props, State> {
-	constructor(props: Props) {
-		super(props);
-		this.state = {
-			onClick: props.onClickHandler,
-			key: props.key,
-		};
-	}
+	const onClick = props.isFixed ? () => {} : props.onClickHandler;
+	const value = props.value ? props.value : null;
 
-	render() {
-		var classNames = ClassNames({
-			cell: true,
-			"selected-cell": this.props.isSelected,
-			"fixed-cell": this.props.isFixed,
-			"highligted-cell": this.props.isHighligted,
-			"highlighted-fixed-cell": this.props.isHighligted && this.props.isFixed,
-			"bottom-border": this.props.isBottomBorder,
-			"right-border": this.props.isRightBorder,
-		});
-
-		var onClick = this.props.isFixed ? null : this.state.onClick;
-		var value = this.props.value ? this.props.value : null;
-
-		return (
-			<div key={this.state.key} className={classNames} onClick={onClick}>
-				<p className="cell-content">{value}</p>
-			</div>
-		);
-	}
-}
+	return (
+		<div key={props.key} className={classNames} onClick={() => onClick()}>
+			<p className="cell-content">{value}</p>
+		</div>
+	);
+};
 
 export default CellVM;
