@@ -1,5 +1,7 @@
 [![Netlify Status](https://api.netlify.com/api/v1/badges/3861c848-8066-4cce-afea-2f35bb8e293c/deploy-status)](https://app.netlify.com/sites/fredrik-sudoku/deploys)
 
+[![Build Status](https://www.travis-ci.com/FredrikEglese/sudoku-react.svg?branch=main)](https://www.travis-ci.com/FredrikEglese/sudoku-react)
+
 # Sudoku in React
 
 I quite enjoy sudoku puzzles and I like the idea of being able to make my own engine for playing sudoku.
